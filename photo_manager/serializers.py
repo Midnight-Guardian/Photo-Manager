@@ -39,32 +39,39 @@ class PhotoUpdateSerializer(serializers.ModelSerializer):
         return value
 
 
+class UserSerializer(serializers.ModelSerializer):
+    """User serializer."""
+
+    class Meta:
+        """Meta Definition."""
+
+        model = User
+        fields = ('id', 'username')
+
+
 class PhotoCreateResponseSerializer(serializers.ModelSerializer):
     """Photo Create Serializer."""
+
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        """Meta Definition."""
+
+        model = Photo
+        fields = ('id', 'user', 's3_image', 'created_at')
+
+
+class PhotoDetailSerializer(serializers.ModelSerializer):
+    """Photo Detail Serializer."""
+
+    user = UserSerializer(read_only=True, many=False)
+    mentions = serializers.ManyRelatedField(child_relation=UserSerializer())
 
     class Meta:
         """Meta Definition."""
 
         model = Photo
         fields = '__all__'
-
-
-class MentionsSerializer(serializers.ModelSerializer):
-    """Mentions Serializer."""
-
-    username = serializers.CharField()
-
-    class Meta:
-        """Meta Definition."""
-
-        model = Photo
-        fields = ('username',)
-
-
-class PhotoDetailSerializer(PhotoCreateResponseSerializer):
-    """Photo Detail Serializer."""
-
-    mentions = serializers.ManyRelatedField(child_relation=MentionsSerializer())
 
 
 class PhotoListSerializer(serializers.ModelSerializer):
