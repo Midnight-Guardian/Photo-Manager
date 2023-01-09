@@ -14,7 +14,7 @@ from user.services import get_matched_users
     manual_parameters=[
         openapi.Parameter(
             'name', openapi.IN_QUERY,
-            description="Username. Get up usernames which are partially matched.",
+            description="Username. Get up to 5 usernames which are partially matched.",
             type=openapi.TYPE_STRING)],
     operation_description='Get up to 5 usernames.',
     responses={status.HTTP_200_OK: UserSerializer(many=True)})
