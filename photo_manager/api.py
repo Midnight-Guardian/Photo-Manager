@@ -34,11 +34,11 @@ class PhotoCRUD(
     filterset_class = PhotoFilter
 
     def get_queryset(self) -> Photo:
-        """Get Queryset."""
+        """Get queryset."""
         return Photo.objects.filter(user_id=self.request.user.id).prefetch_related('mentions')
 
     def get_serializer_class(self):
-        """Get Serializer class."""
+        """Get serializer class."""
         if self.action == 'list':
             return PhotoListSerializer
         if self.action == 'retrieve':
@@ -50,7 +50,7 @@ class PhotoCRUD(
 
     @swagger_auto_schema(responses={status.HTTP_201_CREATED: PhotoCreateResponseSerializer()})
     def create(self, request, *args, **kwargs):
-        """Create Photo obj and Upload to S3."""
+        """Create photo obj and upload to S3."""
         request_data = request.data
         serializer = self.get_serializer(data=request_data)
         serializer.is_valid(raise_exception=True)
@@ -60,7 +60,7 @@ class PhotoCRUD(
 
     @swagger_auto_schema(responses={status.HTTP_200_OK: PhotoCreateResponseSerializer()})
     def update(self, request, *args, **kwargs):
-        """Update Photo Object."""
+        """Update photo's metadata."""
         request_data = request.data
         serializer = self.get_serializer(data=request_data)
         serializer.is_valid(raise_exception=True)
